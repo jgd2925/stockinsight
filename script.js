@@ -1,15 +1,6 @@
-/**
- * StockHub - Real-time Financial Data
- * Fixed API calls with proper error handling
- */
+// Quick Debug Version
+console.log('Script loaded at:', new Date().toLocaleTimeString());
 
-const CONFIG = {
-    // Using direct CORS-free APIs
-    STOCK_API: 'https://quote.cboe.com/ajax/quoteApi.json?ticker=',
-    NEWS_API: 'https://newsapi.org/v2/everything?q=stock&sortBy=publishedAt&language=ko',
-};
-
-// Mock data for fallback
 const MOCK_STOCKS = [
     { symbol: '코스피', price: '2,800', change: '+0.45', up: true },
     { symbol: '코스닥', price: '850', change: '-0.12', up: false },
@@ -23,23 +14,15 @@ const MOCK_NEWS = [
     { title: '금리 인하 기대감', time: '어제 오전 11:20' }
 ];
 
-// Display error with retry
-function displayError(containerId, message, retryAction) {
-    const container = document.getElementById(containerId);
-    if (container) {
-        container.innerHTML = `
-            <div class="status-msg fade-in">
-                <p class="error-text">⚠️ ${message}</p>
-                <span class="retry-link" onclick="${retryAction}">다시 시도</span>
-            </div>
-        `;
-    }
-}
-
-// Render market indices
 function renderIndices(items) {
+    console.log('Rendering indices:', items);
     const container = document.getElementById('index-cards');
-    if (!container) return;
+    console.log('Container found:', !!container);
+    
+    if (!container) {
+        console.error('❌ index-cards 컨테이너를 찾을 수 없습니다!');
+        return;
+    }
     
     container.innerHTML = items.map(item => `
         <div class="min-w-[160px] bg-white p-5 rounded-2xl border border-gray-100 shadow-sm fade-in">
@@ -52,10 +35,15 @@ function renderIndices(items) {
     `).join('');
 }
 
-// Render stock rankings
 function renderRankings(items) {
+    console.log('Rendering rankings:', items);
     const container = document.getElementById('ranking-list');
-    if (!container) return;
+    console.log('Container found:', !!container);
+    
+    if (!container) {
+        console.error('❌ ranking-list 컨테이너를 찾을 수 없습니다!');
+        return;
+    }
     
     container.innerHTML = items.map((item, idx) => `
         <div class="flex items-center justify-between p-1 cursor-pointer fade-in">
@@ -71,10 +59,15 @@ function renderRankings(items) {
     `).join('');
 }
 
-// Render news
 function renderNews(items) {
+    console.log('Rendering news:', items);
     const container = document.getElementById('news-container');
-    if (!container) return;
+    console.log('Container found:', !!container);
+    
+    if (!container) {
+        console.error('❌ news-container 컨테이너를 찾을 수 없습니다!');
+        return;
+    }
     
     container.innerHTML = items.map(item => `
         <div class="p-4 bg-white rounded-2xl border border-gray-100 active:scale-95 transition-all cursor-pointer fade-in hover:shadow-md">
@@ -84,46 +77,19 @@ function renderNews(items) {
     `).join('');
 }
 
-// Fetch market data with timeout
-async function getMarketData() {
-    try {
-        // Using mock data for now - replace with real API when CORS issue is resolved
-        renderIndices(MOCK_STOCKS);
-        renderRankings(MOCK_STOCKS);
-    } catch (err) {
-        console.error('Market data error:', err);
-        displayError('index-cards', '지수 데이터를 불러오지 못했습니다.', 'getMarketData()');
-        displayError('ranking-list', '종목 데이터를 불러오지 못했습니다.', 'getMarketData()');
-        
-        // Show mock data on error
-        renderIndices(MOCK_STOCKS);
-        renderRankings(MOCK_STOCKS);
-    }
-}
-
-// Fetch news data
-async function getNewsData() {
-    try {
-        // Using mock data for now - replace with real API when available
-        renderNews(MOCK_NEWS);
-    } catch (err) {
-        console.error('News data error:', err);
-        displayError('news-container', '뉴스를 불러오지 못했습니다.', 'getNewsData()');
-        
-        // Show mock data on error
-        renderNews(MOCK_NEWS);
-    }
-}
-
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('StockHub initialized');
-    getMarketData();
-    getNewsData();
-    
-    // Refresh every 60 seconds
-    setInterval(() => {
-        getMarketData();
-        getNewsData();
-    }, 60000);
+    console.log('✅ DOMContentLoaded 실행됨');
+    renderIndices(MOCK_STOCKS);
+    renderRankings(MOCK_STOCKS);
+    renderNews(MOCK_NEWS);
 });
+
+// Fallback: 만약 DOMContentLoaded가 작동 안 하면 즉시 실행
+if (document.readyState === 'loading') {
+    console.log('Document still loading...');
+} else {
+    console.log('✅ Document already loaded, rendering immediately');
+    renderIndices(MOCK_STOCKS);
+    renderRankings(MOCK_STOCKS);
+    renderNews(MOCK_NEWS);
+}
