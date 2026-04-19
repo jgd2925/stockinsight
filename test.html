@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+    <script>
+        // Sample mock data
+        const mockData = {
+            title: 'Mock Data',
+            description: 'This is a test to verify that JavaScript execution works properly.'
+        };
+
+        // Function to display mock data
+        function displayMockData() {
+            document.getElementById('mock-title').innerText = mockData.title;
+            document.getElementById('mock-description').innerText = mockData.description;
+        } 
+
+        // Execute display function on load
+        window.onload = displayMockData;
+    </script>
+</head>
+<body>
+    <h1 id="mock-title"></h1>
+    <p id="mock-description"></p>
+</body>
+</html>
