@@ -1,9 +1,64 @@
-<section class="bg-white rounded-[28px] p-7 shadow-sm">
-    <h3 class="text-xl font-black mb-6 flex items-center gap-2">
-        지금 일어나는 일 🗞️
-    </h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="theme-container">
-        <div class="h-24 skeleton w-full"></div>
-        <div class="h-24 skeleton w-full"></div>
-    </div>
-</section>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StockHub - 실시간 증권 정보</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="text-[#191F28]">
+
+    <header class="header-glass sticky top-0 border-b border-gray-100 z-50">
+        <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <h1 id="logo" class="text-[#3182F6] text-2xl font-black italic tracking-tighter cursor-pointer">StockHub</h1>
+                <nav class="hidden md:flex gap-6 font-bold text-gray-500">
+                    <a href="#" class="text-[#191F28]">홈</a>
+                    <a href="#" class="hover:text-[#191F28]">실시간 차트</a>
+                    <a href="#" class="hover:text-[#191F28]">커뮤니티</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="relative hidden sm:block">
+                    <input type="text" id="searchInput" placeholder="종목코드 검색 (예: 005930)" class="bg-gray-100 px-4 py-2 rounded-xl text-sm w-64 focus:outline-none">
+                </div>
+                <div class="w-8 h-8 bg-gray-200 rounded-full"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-5 grid grid-cols-1 md:grid-cols-12 gap-6">
+        
+        <div class="md:col-span-8 space-y-6">
+            <div id="index-cards" class="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+                <div class="min-w-[160px] h-28 skeleton"></div>
+                <div class="min-w-[160px] h-28 skeleton"></div>
+                <div class="min-w-[160px] h-28 skeleton"></div>
+            </div>
+
+            <section class="card-white p-7">
+                <h3 class="text-xl font-black mb-6 flex items-center gap-2">지금 일어나는 일 🗞️</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="news-container">
+                    <div class="h-24 skeleton w-full"></div>
+                    <div class="h-24 skeleton w-full"></div>
+                </div>
+            </section>
+        </div>
+
+        <aside class="md:col-span-4">
+            <div class="card-white p-6 sticky top-24">
+                <h3 class="font-black text-lg mb-5">실시간 종목 시세</h3>
+                <div id="ranking-list" class="space-y-5">
+                    <div class="h-10 skeleton w-full"></div>
+                    <div class="h-10 skeleton w-full"></div>
+                    <div class="h-10 skeleton w-full"></div>
+                </div>
+                <button class="w-full mt-6 py-3 bg-[#F2F4F6] rounded-xl text-sm font-bold text-gray-500">데이터 자동 갱신 중</button>
+            </div>
+        </aside>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
