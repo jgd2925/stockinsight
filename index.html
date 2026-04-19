@@ -5,145 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockHub - 증권 정보 피드</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-    <style>
-        body { font-family: 'Pretendard', sans-serif; background-color: #F2F4F6; color: #191F28; }
-        .card { @apply bg-white rounded-[24px] p-6 shadow-sm hover:shadow-md transition-shadow; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header class="sticky top-0 bg-white/80 backdrop-blur-lg border-b border-gray-100 z-50">
+    <header class="header-glass sticky top-0 border-b border-gray-100 z-50">
         <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
             <div class="flex items-center gap-8">
-                <h1 class="text-[#3182F6] text-2xl font-black italic tracking-tighter cursor-pointer">StockHub</h1>
+                <h1 id="logo" class="text-[#3182F6] text-2xl font-black italic tracking-tighter cursor-pointer">StockHub</h1>
                 <nav class="hidden md:flex gap-6 font-bold text-gray-500">
                     <a href="#" class="text-[#191F28]">홈</a>
                     <a href="#" class="hover:text-[#191F28]">실시간 차트</a>
                     <a href="#" class="hover:text-[#191F28]">테마별 정보</a>
-                    <a href="#" class="hover:text-[#191F28]">커뮤니티</a>
                 </nav>
             </div>
             <div class="flex items-center gap-4">
-                <div class="relative hidden sm:block">
-                    <input type="text" placeholder="종목명을 검색해보세요" class="bg-gray-100 px-4 py-2 rounded-xl text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all">
-                </div>
-                <div class="w-8 h-8 bg-gray-200 rounded-full cursor-pointer"></div>
+                <input type="text" placeholder="검색" class="bg-gray-100 px-4 py-2 rounded-xl text-sm hidden sm:block focus:outline-none">
+                <div class="w-8 h-8 bg-gray-200 rounded-full"></div>
             </div>
         </div>
     </header>
 
     <main class="max-w-6xl mx-auto p-5 grid grid-cols-1 md:grid-cols-12 gap-6">
-        
         <div class="md:col-span-8 space-y-6">
-            
-            <div class="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
-                <div class="min-w-[160px] bg-white p-5 rounded-2xl shadow-sm border border-gray-50">
-                    <p class="text-xs font-bold text-gray-400">코스피</p>
-                    <p class="text-lg font-black mt-1">2,642.30</p>
-                    <p class="text-xs text-[#F04452] font-bold">+1.24% ▲</p>
+            <div id="index-cards" class="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
                 </div>
-                <div class="min-w-[160px] bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                    <p class="text-xs font-bold text-gray-400">코스닥</p>
-                    <p class="text-lg font-black mt-1">860.12</p>
-                    <p class="text-xs text-[#3182F6] font-bold">-0.52% ▼</p>
-                </div>
-                <div class="min-w-[160px] bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                    <p class="text-xs font-bold text-gray-400">나스닥</p>
-                    <p class="text-lg font-black mt-1">16,274.94</p>
-                    <p class="text-xs text-[#F04452] font-bold">+0.82% ▲</p>
-                </div>
-            </div>
 
-            <section class="bg-white rounded-[28px] p-7 shadow-sm">
-                <h3 class="text-xl font-black mb-6 flex items-center gap-2">
-                    지금 뜨거운 테마 🔥
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="p-4 bg-orange-50 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-orange-100">
-                        <div>
-                            <p class="font-bold text-orange-600 text-sm">초전도체</p>
-                            <p class="text-xs text-orange-400 mt-1">어제보다 12.5% 상승</p>
-                        </div>
-                        <span class="text-2xl">⚡</span>
+            <section class="card-white p-7">
+                <h3 class="text-xl font-black mb-6">지금 뜨거운 테마 🔥</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="theme-container">
                     </div>
-                    <div class="p-4 bg-blue-50 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-blue-100">
-                        <div>
-                            <p class="font-bold text-blue-600 text-sm">인공지능</p>
-                            <p class="text-xs text-blue-400 mt-1">어제보다 4.2% 상승</p>
-                        </div>
-                        <span class="text-2xl">🤖</span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="space-y-4">
-                <h3 class="text-xl font-black px-2">투자 인사이트</h3>
-                <div class="bg-white rounded-[28px] p-6 shadow-sm flex flex-col sm:flex-row gap-5 items-start">
-                    <div class="w-full sm:w-32 h-32 bg-gray-100 rounded-2xl shrink-0 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1611974717482-98aa0039296f?auto=format&fit=crop&w=300" class="w-full h-full object-cover">
-                    </div>
-                    <div class="space-y-2">
-                        <span class="text-[#3182F6] text-xs font-bold bg-blue-50 px-2 py-1 rounded-md">시장 분석</span>
-                        <h4 class="text-lg font-bold leading-tight">금리 동결 가능성, 반도체 주식에는 어떤 영향을 줄까?</h4>
-                        <p class="text-sm text-gray-500 line-clamp-2">미 연준의 최근 발표에 따르면 금리 동결 시나리오가 유력해지고 있습니다. 이는 고성장 기술주들에게는 호재로 작용할 가능성이...</p>
-                        <p class="text-xs text-gray-400">3시간 전 · 읽기 시간 5분</p>
-                    </div>
-                </div>
             </section>
         </div>
 
         <aside class="md:col-span-4 space-y-6">
-            <div class="bg-white rounded-[28px] p-6 shadow-sm border border-gray-50">
+            <div class="card-white p-6">
                 <h3 class="font-black text-lg mb-5">실시간 인기 검색</h3>
-                <div class="space-y-5">
-                    <div class="flex items-center justify-between group cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <span class="text-blue-500 font-bold w-4">1</span>
-                            <span class="font-bold group-hover:underline">삼성전자</span>
-                        </div>
-                        <span class="text-xs text-[#F04452] font-bold">▲ 200</span>
+                <div id="ranking-list" class="space-y-5">
                     </div>
-                    <div class="flex items-center justify-between group cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <span class="text-blue-500 font-bold w-4">2</span>
-                            <span class="font-bold group-hover:underline">SK하이닉스</span>
-                        </div>
-                        <span class="text-xs text-[#3182F6] font-bold">▼ 500</span>
-                    </div>
-                    <div class="flex items-center justify-between group cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <span class="text-blue-500 font-bold w-4">3</span>
-                            <span class="font-bold group-hover:underline">현대차</span>
-                        </div>
-                        <span class="text-xs text-gray-400 font-bold">-</span>
-                    </div>
-                </div>
-                <button class="w-full mt-6 py-3 bg-[#F2F4F6] rounded-xl text-sm font-bold text-gray-500">전체 순위 보기</button>
-            </div>
-
-            <div class="bg-[#191F28] rounded-[28px] p-6 shadow-sm text-white">
-                <h3 class="font-bold mb-4">투자자 토론방 💬</h3>
-                <p class="text-sm text-gray-400 mb-6 font-medium">지금 2,451명이 삼성전자에 대해 이야기하고 있어요.</p>
-                <div class="space-y-3">
-                    <div class="bg-gray-800/50 p-3 rounded-xl text-xs">
-                        "오늘 외인 매수세 장난 아니네요ㄷㄷ"
-                    </div>
-                    <div class="bg-gray-800/50 p-3 rounded-xl text-xs">
-                        "지금 들어가도 안 늦었을까요?"
-                    </div>
-                </div>
             </div>
         </aside>
-
     </main>
 
-    <div class="fixed bottom-6 right-6 md:hidden">
-        <button class="bg-[#3182F6] text-white p-4 rounded-full shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        </button>
-    </div>
-
+    <script src="script.js"></script>
 </body>
 </html>
