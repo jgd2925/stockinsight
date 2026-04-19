@@ -1,6 +1,8 @@
-// Quick Debug Version
-console.log('Script loaded at:', new Date().toLocaleTimeString());
+/**
+ * StockHub - Real Data First, Mock Data Fallback
+ */
 
+// Mock data for fallback
 const MOCK_STOCKS = [
     { symbol: '코스피', price: '2,800', change: '+0.45', up: true },
     { symbol: '코스닥', price: '850', change: '-0.12', up: false },
@@ -14,15 +16,22 @@ const MOCK_NEWS = [
     { title: '금리 인하 기대감', time: '어제 오전 11:20' }
 ];
 
-function renderIndices(items) {
-    console.log('Rendering indices:', items);
-    const container = document.getElementById('index-cards');
-    console.log('Container found:', !!container);
-    
-    if (!container) {
-        console.error('❌ index-cards 컨테이너를 찾을 수 없습니다!');
-        return;
+// Display error message
+function displayError(containerId, message) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.innerHTML = `
+            <div class="status-msg fade-in">
+                <p class="error-text">⚠️ ${message}</p>
+            </div>
+        `;
     }
+}
+
+// Render indices
+function renderIndices(items) {
+    const container = document.getElementById('index-cards');
+    if (!container) return;
     
     container.innerHTML = items.map(item => `
         <div class="min-w-[160px] bg-white p-5 rounded-2xl border border-gray-100 shadow-sm fade-in">
@@ -35,15 +44,10 @@ function renderIndices(items) {
     `).join('');
 }
 
+// Render rankings
 function renderRankings(items) {
-    console.log('Rendering rankings:', items);
     const container = document.getElementById('ranking-list');
-    console.log('Container found:', !!container);
-    
-    if (!container) {
-        console.error('❌ ranking-list 컨테이너를 찾을 수 없습니다!');
-        return;
-    }
+    if (!container) return;
     
     container.innerHTML = items.map((item, idx) => `
         <div class="flex items-center justify-between p-1 cursor-pointer fade-in">
@@ -59,15 +63,10 @@ function renderRankings(items) {
     `).join('');
 }
 
+// Render news - FIXED (완전한 함수)
 function renderNews(items) {
-    console.log('Rendering news:', items);
     const container = document.getElementById('news-container');
-    console.log('Container found:', !!container);
-    
-    if (!container) {
-        console.error('❌ news-container 컨테이너를 찾을 수 없습니다!');
-        return;
-    }
+    if (!container) return;
     
     container.innerHTML = items.map(item => `
         <div class="p-4 bg-white rounded-2xl border border-gray-100 active:scale-95 transition-all cursor-pointer fade-in hover:shadow-md">
@@ -77,19 +76,82 @@ function renderNews(items) {
     `).join('');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ DOMContentLoaded 실행됨');
-    renderIndices(MOCK_STOCKS);
-    renderRankings(MOCK_STOCKS);
-    renderNews(MOCK_NEWS);
-});
-
-// Fallback: 만약 DOMContentLoaded가 작동 안 하면 즉시 실행
-if (document.readyState === 'loading') {
-    console.log('Document still loading...');
-} else {
-    console.log('✅ Document already loaded, rendering immediately');
-    renderIndices(MOCK_STOCKS);
-    renderRankings(MOCK_STOCKS);
-    renderNews(MOCK_NEWS);
+// Get market data with fallback
+async function getMarketData() {
+    try {
+        console.log('📊 Fetching market data...');
+        
+        // Show mock data immediately as fallback
+        renderIndices(MOCK_STOCKS);
+        renderRankings(MOCK_STOCKS);
+        
+        // Try to fetch real data from proxy
+        const CONFIG = {
+            PROXY: 'https://api.allorigins.win/get?url=',
+            STOCK_API: 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=',
+            SYMBOLS: ['^KS11', '^KQ11', '^IXIC']
+        };
+        
+        const targetUrl = `${CONFIG.STOCK_API}${CONFIG.SYMBOLS.join(',')}`;
+        const response = await fetch(`${CONFIG.PROXY}${encodeURIComponent(targetUrl)}`);
+        
+        if (response.ok) {
+            const raw = await response.json();
+            const data = JSON.parse(raw.contents).quoteResponse.result;
+            if (data && data.length > 0) {
+                console.log('✅ Real data loaded');
+                renderIndices(data.filter(s => s.symbol.startsWith('^')));
+                renderRankings(data.filter(s => !s.symbol.startsWith('^')));
+            }
+        }
+    } catch (err) {
+        console.error('⚠️ Error loading market data:', err);
+        // Keep showing mock data
+    }
 }
+
+// Get news data with fallback
+async function getNewsData() {
+    try {
+        console.log('📰 Fetching news data...');
+        
+        // Show mock news immediately
+        renderNews(MOCK_NEWS);
+        
+        // Try to fetch real news
+        const CONFIG = {
+            PROXY: 'https://api.allorigins.win/get?url=',
+            NEWS_RSS: 'https://fs.jtbc.co.kr/RSS/newsflash.xml'
+        };
+        
+        const response = await fetch(`${CONFIG.PROXY}${encodeURIComponent(CONFIG.NEWS_RSS)}`);
+        
+        if (response.ok) {
+            const raw = await response.json();
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(raw.contents, "text/xml");
+            const items = xml.querySelectorAll("item");
+            
+            if (items && items.length > 0) {
+                console.log('✅ Real news loaded');
+                renderNews(Array.from(items).slice(0, 4));
+            }
+        }
+    } catch (err) {
+        console.error('⚠️ Error loading news:', err);
+        // Keep showing mock news
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 StockHub initialized');
+    getMarketData();
+    getNewsData();
+    
+    // Refresh every 60 seconds
+    setInterval(() => {
+        getMarketData();
+        getNewsData();
+    }, 60000);
+});
