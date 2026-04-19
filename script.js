@@ -9,7 +9,6 @@ body {
 .card-white {
     background: white;
     border-radius: 28px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .header-glass {
@@ -18,34 +17,27 @@ body {
     -webkit-backdrop-filter: blur(15px);
 }
 
-/* 에러 메시지 스타일 */
-.error-box {
+/* 에러 UI */
+.status-msg {
     width: 100%;
-    padding: 20px;
-    background-color: #FFF0F0;
-    border: 1px solid #FFE0E0;
+    padding: 30px;
     border-radius: 20px;
     text-align: center;
 }
 
-.retry-btn {
-    margin-top: 8px;
-    padding: 6px 16px;
-    background-color: #F04452;
-    color: white;
-    border-radius: 10px;
-    font-size: 12px;
+.error-text {
+    color: #F04452;
     font-weight: bold;
+    font-size: 14px;
 }
 
-/* 스켈레톤 로딩 */
-@keyframes skeleton-blink {
-    0%, 100% { background-color: #f0f0f0; }
-    50% { background-color: #e8e8e8; }
-}
-.skeleton {
-    animation: skeleton-blink 1.5s infinite;
-    border-radius: 15px;
+.retry-link {
+    margin-top: 10px;
+    display: inline-block;
+    color: #3182F6;
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -53,9 +45,9 @@ body {
 }
 
 .fade-in {
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.4s ease-in-out;
 }
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
