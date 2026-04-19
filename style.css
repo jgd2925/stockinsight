@@ -1,43 +1,17 @@
-/* 프리텐다드 폰트 적용 */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
 
-body {
-    font-family: 'Pretendard', sans-serif;
-    background-color: #F2F4F6;
-    color: #191F28;
-    margin: 0;
-}
+body { font-family: 'Pretendard', sans-serif; background-color: #F2F4F6; margin: 0; -webkit-font-smoothing: antialiased; }
 
-/* 토스 스타일 카드 공통 레이아웃 */
-.card-white {
-    background-color: white;
-    border-radius: 28px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-}
+/* 토스 스타일 카드 */
+.card-white { background: white; border-radius: 28px; transition: all 0.2s ease-in-out; }
+.card-white:active { transform: scale(0.98); }
 
-.header-glass {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+/* 스켈레톤 로딩 애니메이션 */
+@keyframes skeleton-gradient {
+    0% { background-color: rgba(165, 165, 165, 0.1); }
+    50% { background-color: rgba(165, 165, 165, 0.3); }
+    100% { background-color: rgba(165, 165, 165, 0.1); }
 }
+.skeleton { animation: skeleton-gradient 1.5s infinite; border-radius: 12px; }
 
-/* 스크롤바 숨기기 */
-.hide-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-
-/* 클릭 효과 애니메이션 */
-.active-scale {
-    transition: transform 0.1s;
-}
-.active-scale:active {
-    transform: scale(0.96);
-}
-
-/* 뉴스 이미지 효과 */
-.news-thumb {
-    transition: transform 0.3s ease;
-}
-.news-thumb:hover {
-    transform: scale(1.05);
-}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
