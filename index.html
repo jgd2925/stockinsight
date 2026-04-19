@@ -2,62 +2,120 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내 주식 - 토스 스타일</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Toss Stock Benchmark</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <style>
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        body { font-family: 'Pretendard', sans-serif; background-color: #F2F4F6; }
+        body { 
+            font-family: 'Pretendard', -apple-system, sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            background-color: #F2F4F6;
+        }
+        /* 토스 특유의 스무스한 애니메이션 */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .tab-active { color: #191F28; border-bottom: 2px solid #191F28; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
-    <div class="max-w-md mx-auto min-h-screen pb-20">
-        <header class="sticky top-0 bg-white/80 backdrop-blur-md px-5 py-4 flex justify-between items-center z-10">
-            <h1 class="text-[#3182F6] text-2xl font-bold italic">toss</h1>
-            <div class="flex gap-4 text-gray-400">🔍 🔔</div>
-        </header>
+<body class="text-[#191F28]">
 
-        <div class="p-5 space-y-4">
-            <section class="bg-white rounded-[28px] p-6 shadow-sm">
-                <p class="text-gray-500 text-sm font-medium mb-1">내 자산</p>
-                <div class="flex justify-between items-end">
-                    <h2 class="text-2xl font-bold text-[#191F28]">12,450,000원</h2>
-                    <span class="text-[#F04452] text-sm font-semibold">+2.4%</span>
+    <div class="max-w-md mx-auto min-h-screen bg-[#F2F4F6] relative">
+        
+        <nav class="sticky top-0 bg-white/80 backdrop-blur-lg px-6 py-4 flex justify-between items-center z-50">
+            <span class="text-[#3182F6] text-2xl font-black tracking-tighter">toss</span>
+            <div class="flex gap-5 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            </div>
+        </nav>
+
+        <div class="p-4 space-y-4 fade-in">
+            
+            <div class="bg-white rounded-[32px] p-7 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <div class="flex items-center text-sm font-semibold text-gray-400 mb-2">
+                    주식 총 자산 <svg class="ml-1" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m9 18 6-6-6-6"/></svg>
                 </div>
-            </section>
+                <h2 class="text-3xl font-extrabold mb-1">32,580,420원</h2>
+                <p class="text-[#F04452] font-bold text-sm">+1,240,000원 (3.8%) ▲</p>
+                
+                <div class="mt-6 flex gap-2">
+                    <button class="flex-1 bg-[#F2F4F6] text-[#4E5968] py-3 rounded-2xl font-bold active:scale-95 transition-transform">채우기</button>
+                    <button class="flex-1 bg-[#E8F3FF] text-[#3182F6] py-3 rounded-2xl font-bold active:scale-95 transition-transform">보내기</button>
+                </div>
+            </div>
 
-            <section class="bg-white rounded-[28px] p-6 shadow-sm">
-                <h3 class="font-bold text-lg mb-6 text-[#191F28]">관심 종목</h3>
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">🍎</div>
+            <div class="bg-white rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <div class="p-6 pb-2">
+                    <h3 class="text-lg font-extrabold">실시간 인기 주식</h3>
+                    <div class="flex gap-4 mt-4 text-sm font-bold text-gray-400 border-b border-gray-100">
+                        <button class="pb-2 tab-active">거래량</button>
+                        <button class="pb-2">상승</button>
+                        <button class="pb-2">하락</button>
+                    </div>
+                </div>
+
+                <div class="px-2 pb-4">
+                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 active:bg-gray-100 rounded-2xl transition-colors">
+                        <div class="flex items-center gap-4">
+                            <span class="text-lg font-bold italic text-gray-300">1</span>
+                            <div class="w-10 h-10 bg-[#f9f9f9] rounded-full flex items-center justify-center shadow-sm">🚀</div>
                             <div>
-                                <p class="font-bold text-[#191F28]">애플</p>
-                                <p class="text-xs text-gray-400">어제보다 1.2% 상승</p>
+                                <p class="font-bold text-[16px]">나스닥 100</p>
+                                <p class="text-xs text-gray-400 font-medium">ETF</p>
                             </div>
                         </div>
                         <div class="text-right">
-                            <p class="font-bold text-[#191F28]">254,100원</p>
-                            <p class="text-xs text-[#F04452]">+3,200원</p>
+                            <p class="font-bold">18,245원</p>
+                            <p class="text-xs text-[#F04452] font-bold">+2.1%</p>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">🔋</div>
+
+                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 active:bg-gray-100 rounded-2xl transition-colors">
+                        <div class="flex items-center gap-4">
+                            <span class="text-lg font-bold italic text-gray-300">2</span>
+                            <div class="w-10 h-10 bg-[#f9f9f9] rounded-full flex items-center justify-center shadow-sm text-lg">🍎</div>
                             <div>
-                                <p class="font-bold text-[#191F28]">테슬라</p>
-                                <p class="text-xs text-gray-400">보합</p>
+                                <p class="font-bold text-[16px]">애플</p>
+                                <p class="text-xs text-[#3182F6] font-medium italic">Buy</p>
                             </div>
                         </div>
                         <div class="text-right">
-                            <p class="font-bold text-[#191F28]">312,500원</p>
-                            <p class="text-xs text-gray-400">0원</p>
+                            <p class="font-bold">245,100원</p>
+                            <p class="text-xs text-[#3182F6] font-bold">-0.4%</p>
                         </div>
                     </div>
                 </div>
-            </section>
+                
+                <button class="w-full py-5 text-[#4E5968] font-bold text-sm bg-gray-50 hover:bg-gray-100 transition-colors">
+                    전체 보기
+                </button>
+            </div>
+
+            <div class="px-6 py-8 text-center">
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    토스증권에서 제공하는 투자정보는 고객의 투자 판단을 돕기 위한 참고용이며, 투자 결과에 대한 책임은 본인에게 있습니다.
+                </p>
+            </div>
+        </div>
+
+        <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-xl border-t border-gray-100 flex justify-around py-3 px-2 z-50">
+            <div class="flex flex-col items-center gap-1 opacity-40">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="text-[10px] font-bold">홈</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 text-[#3182F6]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                <span class="text-[10px] font-bold">주식</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 opacity-40">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <span class="text-[10px] font-bold">소식</span>
+            </div>
         </div>
     </div>
+
 </body>
 </html>
